@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencatatan Security</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+    }
+    input, select, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pencatatan Data Security</h1>
+  <form id="dataForm">
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" name="nama" required>
+    
+    <label for="jenisData">Jenis Data:</label>
+    <select id="jenisData" name="jenisData" required>
+      <option value="Absensi">Absensi</option>
+      <option value="Buku Tamu">Buku Tamu</option>
+      <option value="Kendaraan Keluar-Masuk">Kendaraan Keluar-Masuk</option>
+      <option value="Izin Karyawan">Izin Karyawan</option>
+    </select>
+
+    <label for="detail">Detail Tambahan:</label>
+    <input type="text" id="detail" name="detail">
+
+    <button type="button" onclick="submitForm()">Kirim</button>
+  </form>
+
+  <p id="response" style="color: green; text-align: center;"></p>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbye-cDrZTvAOsQ05TSsUjemEc9UTjZoqYJdacTGH8Ia_0PckGDoJjyJpxtjMX9TQF97QQ/exec"; // Ganti dengan URL Web App Anda
+
+    async function submitForm() {
+      const nama = document.getElementById("nama").value;
+      const jenisData = document.getElementById("jenisData").value;
+      const detail = document.getElementById("detail").value;
+
+      const data = { nama, jenisData, detail };
+
+      try {
+        const response = await fetch(scriptURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (result.status === "success") {
+          document.getElementById("response").innerText = "Data berhasil dikirim!";
+          document.getElementById("dataForm").reset();
+        } else {
+          document.getElementById("response").innerText = "Terjadi kesalahan!";
+        }
+      } catch (error) {
+        document.getElementById("response").innerText = "Gagal mengirim data!";
+      }
+    }
+  </script>
+</body>
+</html>
